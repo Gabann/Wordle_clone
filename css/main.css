@@ -4,7 +4,7 @@
     flex-direction: column;
 }
 
-.letter-box {
+div[class^="letter-box-"] {
     border: 2px solid rgb(128, 128, 128);
     border-radius: 3px;
     margin: 2px;
@@ -22,8 +22,28 @@
     border: 2px solid black;
 }
 
-.letter-row {
+#input-container {
+    text-align: center;
+}
+
+input {
+    text-align: center;
+}
+
+div[class^="letter-row-"] {
     display: flex;
+}
+
+.wrong-position-letter {
+    background-color: yellow;
+}
+
+.correct-letter {
+    background-color: green;
+}
+
+#visual-keyboard {
+    text-align: center;
 }
 
 /*@import 'https://fonts.googleapis.com/css?family=Open+Sans';*/

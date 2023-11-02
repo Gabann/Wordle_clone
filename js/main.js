@@ -6,14 +6,14 @@ let GuessesMade = [];
 
 function GetRandomWord(numberOfWords = 1)
 {
-    let wordList = [];
+	let wordList = [];
 
-    for (let i = 0; i < numberOfWords; i++)
-    {
-        wordList.push(WORDS[Math.floor(Math.random() * WORDS.length)]);
-    }
+	for (let i = 0; i < numberOfWords; i++)
+	{
+		wordList.push(WORDS[Math.floor(Math.random() * WORDS.length)]);
+	}
 
-    return wordList;
+	return wordList;
 }
 
 let CurrentWord = GetRandomWord()[0];
@@ -23,77 +23,76 @@ input.maxLength = CurrentWord.length;
 
 function InitBoard()
 {
-    let board = document.getElementById("game-board");
+	let board = document.getElementById("game-board");
 
-    for (let i = 0; i < NumberOfGuesses; i++)
-    {
-        let row = document.createElement("div");
-        row.className = "letter-row";
+	for (let i = 0; i < NumberOfGuesses; i++)
+	{
+		let row = document.createElement("div");
+		row.className = "letter-row-" + i;
 
-        for (let j = 0; j < CurrentWord.length; j++)
-        {
-            let box = document.createElement("div");
-            box.className = "letter-box";
-            row.appendChild(box)
-        }
+		for (let j = 0; j < CurrentWord.length; j++)
+		{
+			let box = document.createElement("div");
+			box.className = "letter-box-" + j;
+			row.appendChild(box)
+		}
 
-        board.appendChild(row)
-    }
+		board.appendChild(row)
+	}
 }
 
-input.addEventListener("keypress", function (event)
+document.addEventListener("keypress", function (event)
 {
-    // If the user presses the "Enter" key on the keyboard
-    if (event.key === "Enter")
-    {
-        // Cancel the default action, if needed
-        event.preventDefault();
+	// If the user presses the "Enter" key on the keyboard
+	if (event.key === "Enter")
+	{
+		// Cancel the default action, if needed
+		event.preventDefault();
 
-        if (input.value.length !== CurrentWord.length || GuessesLeft <= 0 || GuessesMade.includes(input.value))
-        {
-            return
-        }
+		if (input.value.length !== CurrentWord.length || GuessesLeft <= 0 || GuessesMade.includes(input.value))
+		{
+			return
+		}
 
-        TestWord(input.value);
-        input.value = '';
-    }
+		TestWord(input.value);
+		input.value = '';
+	}
 });
 
 function TestWord(input)
 {
-    GuessesLeft--;
-    GuessesMade.push(input);
+	GuessesLeft--;
+	GuessesMade.push(input);
 
-    CompareWords(input, CurrentWord);
+	CompareWords(input, CurrentWord);
 }
 
 function CompareWords(input, currentWord)
 {
-    let correctLetters = 0;
+	let correctLetters = 0;
 
-    for (let i = 0; i < currentWord.length; i++)
-    {
-        if (input.at(i) === currentWord.at(i))
-        {
-            console.log(`letter ${input.at(i)} is correct`);
-            correctLetters++;
-        }
-        else if (currentWord.includes(input.at(i)))
-        {
-            console.log(`${input.at(i)} is inside the word but not at correct location`);
-        }
+	let row = document.querySelector(`.letter-row-${GuessesMade.length - 1}`);
 
-        if (currentWord.length === correctLetters)
-        {
-            console.log("You won");
-        }
-    }
+	for (let i = 0; i < currentWord.length; i++)
+	{
+		let letter = row.querySelector(`.letter-box-${i}`);
+		letter.innerHTML = input.at(i);
+
+		if (input.at(i) === currentWord.at(i))
+		{
+			letter.classList.add("correct-letter");
+			correctLetters++;
+		}
+		else if (currentWord.includes(input.at(i)))
+		{
+			letter.classList.add("wrong-position-letter");
+		}
+		if (currentWord.length === correctLetters)
+		{
+			console.log("You won");
+		}
+	}
 }
-
-// function InsertKey(key) 
-// {
-//	
-// }
 
 console.log(CurrentWord);
 InitBoard();
