@@ -1,11 +1,11 @@
 import {WORDS} from "./words.js";
 
-const NumberOfGuesses = 6;
+let NumberOfGuesses;
 let GuessesLeft = NumberOfGuesses;
 let GuessesMade = [];
-
+let CurrentWord;
 let buttons = document.querySelectorAll("button");
-// let input = document.getElementById("input");
+let input = document.getElementById("input");
 
 buttons.forEach(function (elem)
 {
@@ -20,27 +20,23 @@ buttons.forEach(function (elem)
 	});
 });
 
-
-function GetRandomWord(numberOfWords = 1)
+function GetRandomWord(wordLength = 5)
 {
-	let wordList = [];
+	let word;
 
-	for (let i = 0; i < numberOfWords; i++)
+	do
 	{
-		wordList.push(WORDS[Math.floor(Math.random() * WORDS.length)]);
+		word = WORDS[Math.floor(Math.random() * WORDS.length)];
 	}
+	while (word.length !== wordLength);
 
-	return wordList;
+	return word;
 }
-
-let CurrentWord = GetRandomWord()[0];
-
-let input = document.getElementById("input");
-input.maxLength = CurrentWord.length;
 
 function InitBoard()
 {
 	let board = document.getElementById("game-board");
+	// board.innerHTML = "";
 
 	for (let i = 0; i < NumberOfGuesses; i++)
 	{
@@ -58,6 +54,20 @@ function InitBoard()
 	}
 }
 
+
+function InitGame(numberOfTries = 6, wordLength)
+{
+	NumberOfGuesses = numberOfTries;
+
+	CurrentWord = GetRandomWord(wordLength);
+	input.maxLength = CurrentWord.length;
+	GuessesMade = [];
+	GuessesLeft = NumberOfGuesses;
+
+	InitBoard();
+	console.log(CurrentWord);
+}
+
 document.addEventListener("keypress", function (event)
 {
 	// If the user presses the "Enter" key on the keyboard
@@ -66,25 +76,60 @@ document.addEventListener("keypress", function (event)
 		// Cancel the default action, if needed
 		event.preventDefault();
 
-		if (input.value.length !== CurrentWord.length || GuessesLeft <= 0 || GuessesMade.includes(input.value))
-		{
-			return
-		}
-
-		TestWord(input.value);
-		input.value = '';
+		TestWord(input);
 	}
 });
 
 function TestWord(input)
 {
+	if (GuessesLeft <= 0)
+	{
+		return;
+	}
+
+	if (input.length !== CurrentWord.length)
+	{
+		$("input").notify(
+			"Your word is too short",
+			{
+				position: "top-center",
+				className: "warning"
+			}
+		);
+		return;
+	}
+	else if (GuessesMade.includes(input.value))
+	{
+		$("input").notify(
+			"You've already guessed this word",
+			{
+				position: "top-center",
+				className: "warning"
+			}
+		);
+
+		return;
+	}
+	// else if (!WORDS.includes(input.value))
+	// {
+	// 	$("input").notify(
+	// 		"I don't know this word",
+	// 		{
+	// 			position: "top-center",
+	// 			className: "warning"
+	// 		}
+	// 	);
+	//
+	// 	return;
+	// }
+
 	GuessesLeft--;
 	GuessesMade.push(input);
-
-	CompareWords(input, CurrentWord);
+	FillLetters(input, CurrentWord);
+	input.value = "";
 }
 
-function CompareWords(input, currentWord)
+function FillLetters(input, currentWord)
 {
 	let correctLetters = 0;
 
@@ -93,16 +138,16 @@ function CompareWords(input, currentWord)
 	for (let i = 0; i < currentWord.length; i++)
 	{
 		let letter = row.querySelector(`.letter-box-${i}`);
-		letter.innerHTML = input.at(i);
-		let visualKeyboardLetter = document.querySelector(`#${input.at(i).toUpperCase()}`);
+		letter.innerHTML = input.value.at(i);
+		let visualKeyboardLetter = document.querySelector(`#${input.value.at(i).toUpperCase()}`);
 
-		if (input.at(i) === currentWord.at(i))
+		if (input.value.at(i) === currentWord.at(i))
 		{
 			letter.classList.add("correct-letter");
 			visualKeyboardLetter.classList.add("correct-letter");
 			correctLetters++;
 		}
-		else if (currentWord.includes(input.at(i)))
+		else if (currentWord.includes(input.value.at(i)))
 		{
 			letter.classList.add("wrong-position-letter");
 			visualKeyboardLetter.classList.add("wrong-position-letter");
@@ -114,7 +159,6 @@ function CompareWords(input, currentWord)
 
 		if (currentWord.length === correctLetters)
 		{
-			console.log("You won");
 			$("input").notify(
 				"You won!",
 				{
@@ -126,5 +170,9 @@ function CompareWords(input, currentWord)
 	}
 }
 
-console.log(CurrentWord);
-InitBoard();
+InitGame(6, 5);
+
+TestWord("qwerty");
+TestWord("begin");
+TestWord("pages");
+TestWord("behind");

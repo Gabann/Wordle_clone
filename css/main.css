@@ -37,11 +37,11 @@ div[class^="letter-row-"] {
 }
 
 .wrong-position-letter {
-    background-color: yellow !important;
+    background-color: rgb(153, 103, 35) !important;
 }
 
 .correct-letter {
-    background-color: green !important;
+    background-color: rgb(50, 128, 53) !important;
 }
 
 .absent-letter {
