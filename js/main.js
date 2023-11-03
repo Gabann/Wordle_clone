@@ -4,6 +4,23 @@ const NumberOfGuesses = 6;
 let GuessesLeft = NumberOfGuesses;
 let GuessesMade = [];
 
+let buttons = document.querySelectorAll("button");
+// let input = document.getElementById("input");
+
+buttons.forEach(function (elem)
+{
+	elem.addEventListener("click", function ()
+	{
+		console.log(`clicked ${elem.id}`);
+
+		if (input.value.length < CurrentWord.length)
+		{
+			input.value += elem.id;
+		}
+	});
+});
+
+
 function GetRandomWord(numberOfWords = 1)
 {
 	let wordList = [];
@@ -77,19 +94,34 @@ function CompareWords(input, currentWord)
 	{
 		let letter = row.querySelector(`.letter-box-${i}`);
 		letter.innerHTML = input.at(i);
+		let visualKeyboardLetter = document.querySelector(`#${input.at(i).toUpperCase()}`);
 
 		if (input.at(i) === currentWord.at(i))
 		{
 			letter.classList.add("correct-letter");
+			visualKeyboardLetter.classList.add("correct-letter");
 			correctLetters++;
 		}
 		else if (currentWord.includes(input.at(i)))
 		{
 			letter.classList.add("wrong-position-letter");
+			visualKeyboardLetter.classList.add("wrong-position-letter");
 		}
+		else
+		{
+			visualKeyboardLetter.classList.add("absent-letter");
+		}
+
 		if (currentWord.length === correctLetters)
 		{
 			console.log("You won");
+			$("input").notify(
+				"You won!",
+				{
+					position: "top-center",
+					className: "success"
+				}
+			);
 		}
 	}
 }
