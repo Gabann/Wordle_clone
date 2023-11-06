@@ -13,8 +13,9 @@ window.addEventListener('DOMContentLoaded', () =>
 {
 	NumberOfGuessesSlider = document.querySelector("#tries-count-slider")
 	WordLengthSlider = document.querySelector("#word-length-slider")
-	visualKeyboardButtons = document.querySelectorAll("button");
+	visualKeyboardButtons = document.querySelectorAll("#visual-keyboard > button");
 	inputContainer = document.getElementById("input");
+	document.getElementById("Reset").addEventListener("click", InitGame);
 
 	//Make all sliders init the game on input
 	let allInputs = document.querySelectorAll('input.slider');
@@ -26,6 +27,7 @@ window.addEventListener('DOMContentLoaded', () =>
 		})
 	})
 
+	//Add a listener to all keyboard buttons
 	visualKeyboardButtons.forEach(function (elem)
 	{
 		elem.addEventListener("click", function ()

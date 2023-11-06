@@ -59,7 +59,7 @@ div[class^="letter-row-"] {
     text-align: center;
 }
 
-#visual-keyboard button {
+button {
     padding: 10px;
     margin: 5px;
     background-color: rgb(73, 78, 81);
