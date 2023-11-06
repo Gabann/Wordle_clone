@@ -1,23 +1,57 @@
 import {WORDS} from "./words.js";
 
-let NumberOfGuesses;
-let GuessesLeft = NumberOfGuesses;
+let NumberOfGuessesSlider;
+let WordLengthSlider;
+let GuessesLeft;
 let GuessesMade = [];
 let CurrentWord;
-let buttons = document.querySelectorAll("button");
-let input = document.getElementById("input");
+let visualKeyboardButtons
+let inputContainer
 
-buttons.forEach(function (elem)
+//Calls made when the page is fully loaded
+window.addEventListener('DOMContentLoaded', (event) =>
 {
-	elem.addEventListener("click", function ()
-	{
-		console.log(`clicked ${elem.id}`);
+	NumberOfGuessesSlider = document.querySelector("#tries-count-slider")
+	WordLengthSlider = document.querySelector("#word-length-slider")
+	visualKeyboardButtons = document.querySelectorAll("button");
+	inputContainer = document.getElementById("input");
 
-		if (input.value.length < CurrentWord.length)
+	//Make all sliders init the game on input
+	let allInputs = document.querySelectorAll('input.slider');
+	allInputs.forEach(function (elem)
+	{
+		elem.addEventListener("input", function ()
 		{
-			input.value += elem.id;
+			InitGame(WordLengthSlider.value, NumberOfGuessesSlider.value);
+		})
+	})
+
+	visualKeyboardButtons.forEach(function (elem)
+	{
+		elem.addEventListener("click", function ()
+		{
+			// console.log(`clicked ${elem.id}`);
+
+			if (inputContainer.value.length < CurrentWord.length)
+			{
+				inputContainer.value += elem.id;
+			}
+		});
+	});
+
+	document.addEventListener("keypress", function (event)
+	{
+		// If the user presses the "Enter" key on the keyboard
+		if (event.key === "Enter")
+		{
+			// Cancel the default action, if needed
+			event.preventDefault();
+
+			GuessWord(inputContainer.value);
 		}
 	});
+
+	InitGame()
 });
 
 function GetRandomWord(wordLength = 5)
@@ -28,22 +62,22 @@ function GetRandomWord(wordLength = 5)
 	{
 		word = WORDS[Math.floor(Math.random() * WORDS.length)];
 	}
-	while (word.length !== wordLength);
+	while (word.length !== parseInt(wordLength));
 
-	return word;
+	return word.toUpperCase();
 }
 
-function InitBoard()
+function InitBoard(numberOfTries, wordLength)
 {
 	let board = document.getElementById("game-board");
-	// board.innerHTML = "";
+	board.innerHTML = "";
 
-	for (let i = 0; i < NumberOfGuesses; i++)
+	for (let i = 0; i < numberOfTries; i++)
 	{
 		let row = document.createElement("div");
 		row.className = "letter-row-" + i;
 
-		for (let j = 0; j < CurrentWord.length; j++)
+		for (let j = 0; j < wordLength; j++)
 		{
 			let box = document.createElement("div");
 			box.className = "letter-box-" + j;
@@ -55,33 +89,24 @@ function InitBoard()
 }
 
 
-function InitGame(numberOfTries = 6, wordLength)
+function InitGame()
 {
-	NumberOfGuesses = numberOfTries;
+	let numberOfTries = NumberOfGuessesSlider.value
+	let wordLength = WordLengthSlider.value
 
 	CurrentWord = GetRandomWord(wordLength);
-	input.maxLength = CurrentWord.length;
+	inputContainer.maxLength = CurrentWord.length;
 	GuessesMade = [];
-	GuessesLeft = NumberOfGuesses;
+	GuessesLeft = numberOfTries;
 
-	InitBoard();
+	InitBoard(numberOfTries, wordLength);
 	console.log(CurrentWord);
 }
 
-document.addEventListener("keypress", function (event)
+function GuessWord(input, answer)
 {
-	// If the user presses the "Enter" key on the keyboard
-	if (event.key === "Enter")
-	{
-		// Cancel the default action, if needed
-		event.preventDefault();
+	input = input.toUpperCase();
 
-		TestWord(input);
-	}
-});
-
-function TestWord(input)
-{
 	if (GuessesLeft <= 0)
 	{
 		return;
@@ -89,7 +114,7 @@ function TestWord(input)
 
 	if (input.length !== CurrentWord.length)
 	{
-		$("input").notify(
+		$("inputContainer").notify(
 			"Your word is too short",
 			{
 				position: "top-center",
@@ -98,9 +123,9 @@ function TestWord(input)
 		);
 		return;
 	}
-	else if (GuessesMade.includes(input.value))
+	else if (GuessesMade.includes(input))
 	{
-		$("input").notify(
+		$("inputContainer").notify(
 			"You've already guessed this word",
 			{
 				position: "top-center",
@@ -110,9 +135,9 @@ function TestWord(input)
 
 		return;
 	}
-	// else if (!WORDS.includes(input.value))
+	// else if (!WORDS.includes(inputContainer.value))
 	// {
-	// 	$("input").notify(
+	// 	$("inputContainer").notify(
 	// 		"I don't know this word",
 	// 		{
 	// 			position: "top-center",
@@ -126,7 +151,7 @@ function TestWord(input)
 	GuessesLeft--;
 	GuessesMade.push(input);
 	FillLetters(input, CurrentWord);
-	input.value = "";
+	inputContainer.value = "";
 }
 
 function FillLetters(input, currentWord)
@@ -138,16 +163,16 @@ function FillLetters(input, currentWord)
 	for (let i = 0; i < currentWord.length; i++)
 	{
 		let letter = row.querySelector(`.letter-box-${i}`);
-		letter.innerHTML = input.value.at(i);
-		let visualKeyboardLetter = document.querySelector(`#${input.value.at(i).toUpperCase()}`);
+		letter.innerHTML = input.at(i);
+		let visualKeyboardLetter = document.querySelector(`#${input.at(i).toUpperCase()}`);
 
-		if (input.value.at(i) === currentWord.at(i))
+		if (input.at(i) === currentWord.at(i))
 		{
 			letter.classList.add("correct-letter");
 			visualKeyboardLetter.classList.add("correct-letter");
 			correctLetters++;
 		}
-		else if (currentWord.includes(input.value.at(i)))
+		else if (currentWord.includes(input.at(i)))
 		{
 			letter.classList.add("wrong-position-letter");
 			visualKeyboardLetter.classList.add("wrong-position-letter");
@@ -159,7 +184,7 @@ function FillLetters(input, currentWord)
 
 		if (currentWord.length === correctLetters)
 		{
-			$("input").notify(
+			$("inputContainer").notify(
 				"You won!",
 				{
 					position: "top-center",
@@ -169,10 +194,3 @@ function FillLetters(input, currentWord)
 		}
 	}
 }
-
-InitGame(6, 5);
-
-TestWord("qwerty");
-TestWord("begin");
-TestWord("pages");
-TestWord("behind");

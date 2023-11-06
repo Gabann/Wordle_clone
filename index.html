@@ -9,13 +9,29 @@
 </head>
 
 <body>
+
+<div id="game-parameters">
+    <p><label for="word-length-slider">Word length</label></p>
+    <input type="range" min="3" max="11" value="5" class="slider" id="word-length-slider">
+
+    <!--    <label for="word-length-number"></label>-->
+    <!--    <input type="number" id="word-length-number" min="3" max="11" value="5">-->
+
+    <p><label for="tries-count-slider">Number of tries</label></p>
+    <input type="range" min="3" max="10" value="6" class="slider" id="tries-count-slider">
+
+    <!--    <label for="tries-count-number"></label>-->
+    <!--    <input type="number" id="tries-count-number" min="3" max="10" value="6">-->
+</div>
+
 <div id="game-board"></div>
 
 <br><br>
 
 <div id="input-container" style="user-select: none">
     <label>
-        <input id="input" type="text" name="input" required minlength="0" maxlength="8" size="20" autofocus autocomplete="false"/>
+        <input id="input" type="text" name="input" required minlength="0" maxlength="8" size="20" autofocus autocomplete="false"
+               oninput="this.value = this.value.toUpperCase()"/>
     </label>
 </div>
 
