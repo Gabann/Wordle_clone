@@ -9,7 +9,7 @@ let visualKeyboardButtons
 let inputContainer
 
 //Calls made when the page is fully loaded
-window.addEventListener('DOMContentLoaded', (event) =>
+window.addEventListener('DOMContentLoaded', () =>
 {
 	NumberOfGuessesSlider = document.querySelector("#tries-count-slider")
 	WordLengthSlider = document.querySelector("#word-length-slider")
@@ -99,11 +99,12 @@ function InitGame()
 	GuessesMade = [];
 	GuessesLeft = numberOfTries;
 
+	ResetButtonsVisual();
 	InitBoard(numberOfTries, wordLength);
 	console.log(CurrentWord);
 }
 
-function GuessWord(input, answer)
+function GuessWord(input)
 {
 	input = input.toUpperCase();
 
@@ -193,4 +194,13 @@ function FillLetters(input, currentWord)
 			);
 		}
 	}
+}
+
+function ResetButtonsVisual()
+{
+	let letters = document.querySelectorAll('#visual-keyboard > *')
+	letters.forEach(function (key)
+	{
+		key.className = "";
+	})
 }
