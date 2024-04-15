@@ -35,7 +35,6 @@ div[class^="letter-box-"] {
 
 input {
     text-align: center;
-    /*pointer-events: none;*/
     font-size: 30pt;
 }
 

@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="css/main.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link href="css/main.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
 </head>
 
 <body>
 
 <div id="game-parameters">
-    <p><label for="word-length-slider">Word length</label></p>
-    <input type="range" min="3" max="11" value="5" class="slider" id="word-length-slider">
+	<p>
+		<label for="word-length-slider">Word length</label>
+	</p>
+	<input class="slider" id="word-length-slider" max="11" min="3" type="range" value="5">
 
-    <!--    <label for="word-length-number"></label>-->
-    <!--    <input type="number" id="word-length-number" min="3" max="11" value="5">-->
-
-    <p><label for="tries-count-slider">Number of tries</label></p>
-    <input type="range" min="3" max="10" value="6" class="slider" id="tries-count-slider">
-
-    <!--    <label for="tries-count-number"></label>-->
-    <!--    <input type="number" id="tries-count-number" min="3" max="10" value="6">-->
+	<p>
+		<label for="tries-count-slider">Number of tries</label>
+	</p>
+	<input class="slider" id="tries-count-slider" max="10" min="3" type="range" value="6">
 </div>
 
 <div id="game-board"></div>
@@ -29,60 +27,61 @@
 <br><br>
 
 <div id="input-container" style="user-select: none">
-    <label>
-        <input id="input" type="text" name="input" required minlength="0" maxlength="8" size="20" autofocus autocomplete="false"
-               oninput="this.value = this.value.toUpperCase()"/>
-    </label>
+	<label>
+		<input autocomplete="false" autofocus id="input" maxlength="8" minlength="0" name="input"
+		       oninput="this.value = this.value.toUpperCase()" required size="20"
+		       type="text"/>
+	</label>
 </div>
 
 <br>
 
 <div id="visual-keyboard">
-    <button id="Q">Q</button>
-    <button id="W">W</button>
-    <button id="E">E</button>
-    <button id="R">R</button>
-    <button id="T">T</button>
-    <button id="Y">Y</button>
-    <button id="U">U</button>
-    <button id="I">I</button>
-    <button id="O">O</button>
-    <button id="P">P</button>
+	<button id="Q">Q</button>
+	<button id="W">W</button>
+	<button id="E">E</button>
+	<button id="R">R</button>
+	<button id="T">T</button>
+	<button id="Y">Y</button>
+	<button id="U">U</button>
+	<button id="I">I</button>
+	<button id="O">O</button>
+	<button id="P">P</button>
 
-    <br>
+	<br>
 
-    <button id="A">A</button>
-    <button id="S">S</button>
-    <button id="D">D</button>
-    <button id="F">F</button>
-    <button id="G">G</button>
-    <button id="H">H</button>
-    <button id="J">J</button>
-    <button id="K">K</button>
-    <button id="L">L</button>
+	<button id="A">A</button>
+	<button id="S">S</button>
+	<button id="D">D</button>
+	<button id="F">F</button>
+	<button id="G">G</button>
+	<button id="H">H</button>
+	<button id="J">J</button>
+	<button id="K">K</button>
+	<button id="L">L</button>
 
-    <br>
+	<br>
 
-    <button id="Z">Z</button>
-    <button id="X">X</button>
-    <button id="C">C</button>
-    <button id="V">V</button>
-    <button id="B">B</button>
-    <button id="N">N</button>
-    <button id="M">M</button>
+	<button id="Z">Z</button>
+	<button id="X">X</button>
+	<button id="C">C</button>
+	<button id="V">V</button>
+	<button id="B">B</button>
+	<button id="N">N</button>
+	<button id="M">M</button>
 
-    <br>
-    <br>
+	<br>
+	<br>
 
 </div>
 
 <div style="text-align: center">
-    <button id="Reset">Reset</button>
+	<button id="Reset">Reset</button>
 </div>
 
 </body>
 
-<script src="./js/main.js" type="module" defer></script>
+<script defer src="./js/main.js"></script>
 <script src="https://cdn.tutorialjinni.com/jquery/3.6.1/jquery.min.js"></script>
 <script src="https://cdn.tutorialjinni.com/notify/0.4.2/notify.min.js"></script>
 </html>
